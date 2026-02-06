@@ -11,6 +11,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          repository: yarnpkg/zpm 
+          path: zpm
 
       # rustup already exists on GitHub runners
       - name: Add Android Rust target
