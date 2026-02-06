@@ -29,12 +29,11 @@ jobs:
       - name: Build ZPM
         run: |
           cd zpm
-          cargo build --release
           rustup target add aarch64-linux-android
-          cargo build --release
+          cargo build --target aarch64-linux-android --release
 
       - name: Upload binary
         uses: actions/upload-artifact@v5
         with:
           name: zpm-android-arm64
-          path: zpm/target/aarch64-linux-android/release/zpm
+          path: zpm/target/
