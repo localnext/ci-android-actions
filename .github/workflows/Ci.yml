@@ -9,8 +9,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install git
-        run: sudo apt-get update && sudo apt-get upgrade
 
       - name: Clone ZPM
         run: |
@@ -31,9 +29,9 @@ jobs:
       - name: Build ZPM
         run: |
           cd zpm
-          export CC_aarch64_linux_android=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang
-          export CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER=$CC_aarch64_linux_android
-          cargo build --release --target aarch64-linux-android
+          cargo build --release
+          rustup target add aarch64-linux-android
+          cargo build --release
 
       - name: Upload binary
         uses: actions/upload-artifact@v5
