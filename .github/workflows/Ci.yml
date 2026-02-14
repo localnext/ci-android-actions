@@ -1,29 +1,27 @@
-name: Build ZPM Android
+name: Benchmark Endpoints (macOS)
 
 on:
-  workflow_dispatch:
-  push:
+  workflow_dispatch: # Manual trigger
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
+  benchmark:
+    runs-on: macos-latest # The key to avoiding some IP blocklists
+    
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
 
-      - name: Clone ZPM
+      - name: Install k6
+        run: brew install k6
+
+      - name: Run Benchmark
         run: |
-          git clone https://github.com/yarnpkg/zpm.git
-          cd zpm
-          ls
+          k6 run image-benchmark.js > results.txt
+          cat results.txt
 
-      - name: Build ZPM
-        run: |
-          cd zpm
-          rustup target add aarch64-linux-android
-          cargo build --target aarch64-linux-android --release
-
-      - name: Upload binary
-        uses: actions/upload-artifact@v5
+      - name: Upload Results
+        uses: actions/upload-artifact@v4
         with:
-          name: zpm-android-arm64
-          path: zpm/target/
+          name: benchmark-results
+          path: results.txt
+          
