@@ -1,27 +1,32 @@
-name: Benchmark Endpoints (macOS)
+name: HTTP Benchmark
 
 on:
-  workflow_dispatch: # Manual trigger
+  workflow_dispatch:
+  push:
+    branches: [ main ]
 
 jobs:
   benchmark:
-    runs-on: macos-latest # The key to avoiding some IP blocklists
-    
+    runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Checkout repo
         uses: actions/checkout@v6
 
-      - name: Install k6
-        run: brew install k6
+      - name: Install oha
+        run: cargo install oha
 
-      - name: Run Benchmark
+      - name: Install Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.14'
+
+      - name: Run benchmark
         run: |
-          k6 run image-benchmark.js > results.txt
-          cat results.txt
+          python benchmark.py
 
-      - name: Upload Results
+      - name: Upload results
         uses: actions/upload-artifact@v4
         with:
           name: benchmark-results
-          path: results.txt
-          
+          path: benchmark_results.csv
