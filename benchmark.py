@@ -17,7 +17,7 @@ def warmup(url):
         "oha",
         "-n", "2000",
         "-c", "50",
-        "--no-http2",
+        "--http2",
         url
     ], stdout=subprocess.DEVNULL)
 
@@ -26,7 +26,7 @@ def run_oha(url):
         "oha",
         "-n", str(TOTAL_REQUESTS),
         "-c", str(CONCURRENCY),
-        "--no-http2",
+        "--http2",
         "-j",
         url
     ], capture_output=True, text=True)
